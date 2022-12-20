@@ -1,7 +1,10 @@
 ﻿using ExMvc.Domain.CustomExceptions;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExMvc.Domain.Entities
 {
+    [Table("Empresa")]
     public class Empresa : Entity
     {
         public string NomeFantasia { get; private set; }
@@ -12,6 +15,26 @@ namespace ExMvc.Domain.Entities
         {
             validarCampos(nomeFantasia, razaoSocial, cNPJ);
             
+            NomeFantasia = nomeFantasia;
+            RazaoSocial = razaoSocial;
+            CNPJ = cNPJ;
+        }
+
+        public Empresa(string id, string nomeFantasia, string razaoSocial, string cNPJ, DateTime dataCadastro)
+        {
+            validarCampos(nomeFantasia, razaoSocial, cNPJ);
+
+            NomeFantasia = nomeFantasia;
+            RazaoSocial = razaoSocial;
+            CNPJ = cNPJ;
+            Id = id;
+            DataCadastro = dataCadastro;    
+        }
+
+        public void Atualizar(string nomeFantasia, string razaoSocial, string cNPJ)
+        {
+            validarCampos(nomeFantasia, razaoSocial, cNPJ);
+
             NomeFantasia = nomeFantasia;
             RazaoSocial = razaoSocial;
             CNPJ = cNPJ;
@@ -28,7 +51,7 @@ namespace ExMvc.Domain.Entities
             DomainExceptionValidade.When(string.IsNullOrEmpty(cNPJ), "CNPJ é obrigatório");
             DomainExceptionValidade.When(cNPJ.Length < 18, "CNPJ inválido. O campo deve ter 18 caracteres");
             DomainExceptionValidade.When(cNPJ.Length > 18, "CNPJ inválido. O campo deve ter 18 caracteres");
-            DomainExceptionValidade.When(validaCNPJ(cNPJ), "CNPJ inválido");
+            //DomainExceptionValidade.When(validaCNPJ(cNPJ), "CNPJ inválido");
         }
 
         private static bool validaCNPJ(string vrCNPJ)
