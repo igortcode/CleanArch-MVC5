@@ -1,0 +1,23 @@
+﻿@if (TempData["type"]?.ToString() == "Success")
+{
+    <div class="alert alert-success" style="margin-top: 20px">
+        <p>@TempData["message"]</p>
+    </div>
+}
+else if (TempData["type"]?.ToString() == "Warning")
+{
+    <div class="alert alert-warning" style="margin-top: 20px">
+        <p>@TempData["message"]</p>
+    </div>
+}
+else if (TempData["type"]?.ToString() == "Error")
+{
+    <div class="alert alert-danger" style="margin-top: 20px">
+        <p>@TempData["message"]</p>
+    </div>
+}
+@{
+    TempData["type"] = null;
+    TempData["message"] = null;
+}
+

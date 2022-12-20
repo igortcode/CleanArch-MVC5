@@ -1,4 +1,5 @@
 ﻿using ExMvc.Application.DTO.Empresa;
+using ExMvc.Application.DTO.Generic;
 using ExMvc.Application.Enums;
 using ExMvc.Application.Services.Interfaces;
 using System.Web.Mvc;
@@ -19,7 +20,10 @@ namespace ExMvc.Web.Controllers
             var result = _empresaServices.BuscarPaginado(pag, tmPag);
             TempData["page"] = result.PageNumber;
             TempData["pageCount"] = result.PageCount;
+            if(result.Response.Notification == NotificationEnum.Success)
+                return View(result.Empresas);
 
+            setNotification(result.Response);
             return View(result.Empresas);
         }
 
@@ -36,7 +40,8 @@ namespace ExMvc.Web.Controllers
                 return View(dto);
             
             var result = _empresaServices.Adicionar(dto);
-
+            
+            setNotification(result);
             if (result.Notification == NotificationEnum.Success)
                 return RedirectToAction(nameof(Index));
 
@@ -47,8 +52,14 @@ namespace ExMvc.Web.Controllers
         public ActionResult Edit(string id)
         {
             var result = _empresaServices.BuscarPorId(id);
+            if(result.Response.Notification == NotificationEnum.Success)
+                return View(result);
 
-            return View(result);
+            else
+            {
+                setNotification(result.Response);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
@@ -58,7 +69,8 @@ namespace ExMvc.Web.Controllers
                 return View(dto);
 
             var result = _empresaServices.Atualizar(dto);
-
+            
+            setNotification(result);
             if (result.Notification == NotificationEnum.Success)
                 return RedirectToAction(nameof(Index));
 
@@ -70,15 +82,30 @@ namespace ExMvc.Web.Controllers
         {
             var result = _empresaServices.BuscarPorId(id);
 
-            return View(result);
+            if (result.Response.Notification == NotificationEnum.Success)
+            {
+                return View(result);
+            }
+            else
+            {
+                setNotification(result.Response);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpGet]
         public ActionResult Delete(string id)
         {
             var result = _empresaServices.BuscarPorId(id);
-
-            return View(result);
+            if (result.Response.Notification == NotificationEnum.Success)
+            {
+                return View(result);
+            }
+            else
+            {
+                setNotification(result.Response);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]
@@ -87,10 +114,32 @@ namespace ExMvc.Web.Controllers
             var result = _empresaServices.Excluir(empresaDTO.Identificador);
 
             if (result.Notification == NotificationEnum.Success)
+            {
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                setNotification(result);
+                return RedirectToAction(nameof(Index));
+            }           
+        }
 
-            var dto = _empresaServices.BuscarPorId(empresaDTO.Identificador);
-            return View(dto);
+        private void setNotification(ResultDTO result)
+        {
+            switch (result.Notification)
+            {
+                case NotificationEnum.Success:
+                    TempData["type"] = nameof(NotificationEnum.Success);
+                    break;
+                case NotificationEnum.Warning:
+                    TempData["type"] = nameof(NotificationEnum.Warning);
+                    break;
+                case NotificationEnum.Error:
+                    TempData["type"] = nameof(NotificationEnum.Error);
+                    break;
+            }
+
+            TempData["message"] = result.Message;
         }
     }
 }

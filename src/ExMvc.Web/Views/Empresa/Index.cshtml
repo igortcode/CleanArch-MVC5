@@ -5,10 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+@Html.Partial("../Shared/_Notification")
+
+<h2>Cadastro de empresas</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Cadastrar", "Create", null,new {@class = "btn btn-info"})
 </p>
 <table class="table">
     <tr>
@@ -36,9 +38,9 @@
             @Html.DisplayFor(modelItem => item.CNPJ)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Identificador }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Identificador }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Identificador })
+            @Html.ActionLink("Atualizar", "Edit", new { id=item.Identificador }, new {@class = "btn btn-warning"}) |
+            @Html.ActionLink("Detalhes", "Details", new { id=item.Identificador }, new { @class = "btn btn-info" }) |
+            @Html.ActionLink("Excluir", "Delete", new { id=item.Identificador }, new { @class = "btn btn-danger" })
         </td>
     </tr>
 }

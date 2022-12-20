@@ -8,6 +8,7 @@ using ExMvc.Domain.Interfaces.Repository.Specific;
 using System;
 using System.Collections.Generic;
 using X.PagedList;
+using System.Linq;
 
 namespace ExMvc.Application.Services.Implementations
 {
@@ -83,13 +84,15 @@ namespace ExMvc.Application.Services.Implementations
                 {
                     Empresas = mapToEmpresaDTO(result),
                     PageNumber = result.PageNumber,
-                    PageCount = result.PageCount
+                    PageCount = result.PageCount,
+                    Response = new ResultDTO(NotificationEnum.Success, "Busca efetuada com sucesso!")
                 };
             }
             catch (Exception)
             {
                 return new ListarEmpresaDTO
                 {
+                    Empresas = Enumerable.Empty<EmpresaDTO>(),
                     Response = new ResultDTO(NotificationEnum.Error, "Ops, ocorreu alguma instabilidade no sistema e não foi possível executar a operação!")
                 };
             }
@@ -97,6 +100,9 @@ namespace ExMvc.Application.Services.Implementations
         
         private IEnumerable<EmpresaDTO> mapToEmpresaDTO(IPagedList<Empresa> result)
         {
+            if(result == null || result.Count == 0)
+                return Enumerable.Empty<EmpresaDTO>();  
+
             return result.Select(a => new EmpresaDTO
             {
                 Identificador = a.Id.ToString(),
@@ -119,7 +125,8 @@ namespace ExMvc.Application.Services.Implementations
                     Identificador = result.Id.ToString(),
                     CNPJ = result.CNPJ,
                     NomeFantasia = result.NomeFantasia,
-                    RazaoSocial = result.RazaoSocial
+                    RazaoSocial = result.RazaoSocial,
+                    Response = new ResultDTO(NotificationEnum.Success, "Busca efetuada com sucesso!")
                 };
             }
             catch (Exception)

@@ -51,7 +51,7 @@ namespace ExMvc.Domain.Entities
             DomainExceptionValidade.When(string.IsNullOrEmpty(cNPJ), "CNPJ é obrigatório");
             DomainExceptionValidade.When(cNPJ.Length < 18, "CNPJ inválido. O campo deve ter 18 caracteres");
             DomainExceptionValidade.When(cNPJ.Length > 18, "CNPJ inválido. O campo deve ter 18 caracteres");
-            //DomainExceptionValidade.When(validaCNPJ(cNPJ), "CNPJ inválido");
+            DomainExceptionValidade.When(!validaCNPJ(cNPJ), "CNPJ inválido");
         }
 
         private static bool validaCNPJ(string vrCNPJ)
