@@ -2,11 +2,10 @@
 Projeto exemplo mvc5 .net Framework e Arquitetura Limpa
 
 Recursos utilizados:
- -> Desing Pattern
-     - Repository
-     - Generic Repository
-     - Strategy
-     - Inversion of Controller
+   - Repository
+   - Generic Repository
+   - Strategy
+   - Inversion of Controller
       
 -> Container de Injeção de Dependencia
      - Unity.MVC
